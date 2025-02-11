@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: go_ecommerce_mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: go_ecommerce_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - go_ecommerce_network
+    restart: always
+
+volumes:
+  mongo_data:
+
+networks:
+  go_ecommerce_network:
+    driver: bridge
