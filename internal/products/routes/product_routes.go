@@ -12,4 +12,5 @@ func ProductRoutes(r *mux.Router, service *services.ProductService) {
 
 	r.HandleFunc("/products", handler.Create).Methods("POST")
 	r.HandleFunc("/products/{id}", handler.GetById).Methods("GET")
+	r.HandleFunc("/products", handler.GetAll).Methods("GET")
 }

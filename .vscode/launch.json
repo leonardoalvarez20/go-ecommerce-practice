@@ -10,8 +10,9 @@
             "mode": "debug",
             "program": "${workspaceFolder}/cmd/main.go",
             "args": [],
-            "env": {},
-            "buildFlags": "-tags=integration"
+            "buildFlags": "-tags=integration",
+            "envFile": "${workspaceFolder}/.env",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
