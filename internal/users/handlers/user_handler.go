@@ -7,29 +7,29 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/leonardoalvarez20/go-ecommerce-practice/common/models"
-	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/products/dtos"
-	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/products/services"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/dtos"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/services"
 )
 
-type ProductHandler struct {
-	service *services.ProductService
+type UserHandler struct {
+	service *services.UserService
 }
 
-func CreateProductHandler(service *services.ProductService) *ProductHandler {
-	return &ProductHandler{service: service}
+func CreateUserHandler(service *services.UserService) *UserHandler {
+	return &UserHandler{service: service}
 }
 
-func (h ProductHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	var createProductRequest dtos.CreateProductRequest
-	err := json.NewDecoder(r.Body).Decode(&createProductRequest)
+	var createUserRequest dtos.CreateUserRequest
+	err := json.NewDecoder(r.Body).Decode(&createUserRequest)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	response, err := h.service.Create(ctx, &createProductRequest)
+	response, err := h.service.Create(ctx, &createUserRequest)
 	w.Header().Set("Content-Type", "application/json")
 	var apiResponse models.ApiResponse
 	statusCode := http.StatusCreated
@@ -45,7 +45,7 @@ func (h ProductHandler) Create(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(apiResponse)
 }
 
-func (h ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
+func (h UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -65,10 +65,20 @@ func (h ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(apiResponse)
 }
 
-func (h ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+func (h UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	response, err := h.service.GetAll(ctx)
+	vars := mux.Vars(r)
+	id := vars["id"]
 
+	var updateUserRequest dtos.UpdateUserRequest
+	err := json.NewDecoder(r.Body).Decode(&updateUserRequest)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	response, err := h.service.UpdateUser(ctx, id, &updateUserRequest)
+	w.Header().Set("Content-Type", "application/json")
 	var apiResponse models.ApiResponse
 	statusCode := http.StatusOK
 	if err != nil {
