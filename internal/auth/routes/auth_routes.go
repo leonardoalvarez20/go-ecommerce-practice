@@ -7,8 +7,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func AuthUserRoutes(r *mux.Router, service *services.AuthService) {
-	handler := handlers.CreateAuthUserHandler(service)
+func AuthUserRoutes(r *mux.Router, service services.AuthService) {
+	handler := handlers.NewAuthUserHandler(service)
 
 	r.HandleFunc("/login", handler.Login).Methods("POST")
 }

@@ -10,17 +10,17 @@ import (
 )
 
 type AuthHandler struct {
-	service *services.AuthService
+	service services.AuthService
 }
 
-func CreateAuthUserHandler(service *services.AuthService) *AuthHandler {
+func NewAuthUserHandler(service services.AuthService) *AuthHandler {
 	return &AuthHandler{service: service}
 }
 
 func (h AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	var authUserRequest dtos.AuthUserRequest
+	var authUserRequest dtos.LoginRequest
 	err := json.NewDecoder(r.Body).Decode(&authUserRequest)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
