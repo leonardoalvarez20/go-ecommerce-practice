@@ -2,29 +2,21 @@ package services
 
 import (
 	"context"
-	"errors"
 
-	"github.com/leonardoalvarez20/go-ecommerce-practice/common/security"
-	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/converters"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/dtos"
-	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/repositories"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/usecases"
 )
 
-type AuthService struct {
-	authRepository *repositories.AuthRepository
+type authService struct {
+	login_usecase usecases.Usecase
 }
 
-func NewAuthService(authRepository *repositories.AuthRepository) *AuthService {
-	return &AuthService{
-		authRepository: authRepository,
+func NewAuthService(login_usecase usecases.Usecase) *authService {
+	return &authService{
+		login_usecase: login_usecase,
 	}
 }
 
-func (s *AuthService) Login(ctx context.Context, authUserRequest *dtos.AuthUserRequest) (dtos.AuthUserResponse, error) {
-	authUser, err := s.authRepository.GetUserByEmail(ctx, authUserRequest.Email)
-	if err != nil || security.ComparePasswords(authUser.Password, authUserRequest.Email) {
-		return dtos.AuthUserResponse{}, errors.New("invalid credentials")
-	}
-
-	return converters.ToAuthUserResponse(&authUser), nil
+func (s *authService) Login(ctx context.Context, loginRequest *dtos.LoginRequest) (*dtos.LoginResponse, error) {
+	return s.login_usecase.Execute(ctx, loginRequest)
 }
