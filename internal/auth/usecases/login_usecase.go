@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 
-	"github.com/leonardoalvarez20/go-ecommerce-practice/common/security"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/converters"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/dtos"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/repositories"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/security"
 )
 
 type loginUsecase struct {

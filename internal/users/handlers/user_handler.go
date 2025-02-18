@@ -6,9 +6,9 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/leonardoalvarez20/go-ecommerce-practice/common/models"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/dtos"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/services"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/pkg/models"
 )
 
 type UserHandler struct {

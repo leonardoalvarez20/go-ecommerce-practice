@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/leonardoalvarez20/go-ecommerce-practice/common/models"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/pkg/models"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/dtos"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/services"
 )

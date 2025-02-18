@@ -4,11 +4,10 @@ import (
 	"context"
 	"time"
 
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/security"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/converters"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/dtos"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/repositories"
-	"github.com/leonardoalvarez20/go-ecommerce-practice/common/security"
-
 )
 
 type UserService struct {
