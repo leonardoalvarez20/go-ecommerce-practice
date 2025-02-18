@@ -1,7 +1,7 @@
 package mongo
 
 import (
-	"github.com/leonardoalvarez20/go-ecommerce-practice/pkg/utils"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/shared/utils"
 )
 
 type Config struct {

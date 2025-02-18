@@ -14,6 +14,8 @@ import (
 	usersRoutes "github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/routes"
 	usersServices "github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/services"
 
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/config"
+
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/database/mongo"
 
 	"github.com/gorilla/mux"
@@ -21,7 +23,9 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	database, err := mongo.ConnectMongo()
+0	database, err := mon go.ConnectMongo()
+	config := config.NewConfig()
+	
 	if err != nil {
 		log.Fatalf("Error conectando a la base de datos: %v", err)
 	}
@@ -32,7 +36,7 @@ func main() {
 
 	usersRepo := usersRepositories.NewUserRepository(database.DB)
 	usersService := usersServices.CreateUserServices(usersRepo)
-	usersRoutes.UsersRoutes(r, usersService)
+	usersRoutes.UsersRoutes(r, config, usersService)
 
 	authContainer := authContainer.NewAuthContainer(database.DB)
 	authRouter.AuthUserRoutes(r, authContainer.AuthServices)
