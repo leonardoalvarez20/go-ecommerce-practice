@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -16,8 +17,7 @@ type MongoDatabase struct {
 }
 
 // ConnectMongo establece la conexión con MongoDB
-func ConnectMongo() (*MongoDatabase, error) {
-	cfg := NewConfig()
+func ConnectMongo(cfg *config.MongoConfig) (*MongoDatabase, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

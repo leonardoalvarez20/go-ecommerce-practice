@@ -4,17 +4,22 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/leonardoalvarez20/go-ecommerce-practice/common/models"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/dtos"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/services"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/config"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/shared/models"
 )
 
 type AuthHandler struct {
 	service services.AuthService
+	config  *config.Config
 }
 
-func NewAuthUserHandler(service services.AuthService) *AuthHandler {
-	return &AuthHandler{service: service}
+func NewAuthUserHandler(service services.AuthService, config *config.Config) *AuthHandler {
+	return &AuthHandler{
+		service: service,
+		config:  config,
+	}
 }
 
 func (h AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +32,7 @@ func (h AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response, err := h.service.Login(ctx, &authUserRequest)
+	response, err := h.service.Login(ctx, h.config, &authUserRequest)
 	w.Header().Set("Content-Type", "application/json")
 	var apiResponse models.ApiResponse
 	statusCode := http.StatusCreated
