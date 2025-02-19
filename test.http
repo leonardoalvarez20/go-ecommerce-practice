@@ -18,3 +18,24 @@ Content-Type: application/json
     "email": "newuser@example.com",
     "password": "leo"
 }
+
+### Get User
+GET http://localhost:8080/users/67af00deb3d96e69dadf4129
+Content-Type: application/json
+Authorization: Bearer 
+
+### Get Users
+GET http://localhost:8080/users
+Content-Type: application/json
+Authorization: Bearer 
+
+### Update User
+PATCH http://localhost:8080/users/67af00deb3d96e69dadf4129
+Content-Type: application/json
+Authorization: Bearer 
+
+{
+    "first_name": "LEo",
+    "last_name": "new"
+
+}

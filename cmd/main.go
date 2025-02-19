@@ -23,9 +23,9 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-0	database, err := mon go.ConnectMongo()
 	config := config.NewConfig()
-	
+	database, err := mongo.ConnectMongo(&config.Mongo)
+
 	if err != nil {
 		log.Fatalf("Error conectando a la base de datos: %v", err)
 	}
@@ -39,7 +39,7 @@ func main() {
 	usersRoutes.UsersRoutes(r, config, usersService)
 
 	authContainer := authContainer.NewAuthContainer(database.DB)
-	authRouter.AuthUserRoutes(r, authContainer.AuthServices)
+	authRouter.AuthUserRoutes(r, config, authContainer.AuthServices)
 
 	// Iniciar servidor HTTP en el puerto 8080
 	fmt.Println("Servidor escuchando en http://localhost:8080")
