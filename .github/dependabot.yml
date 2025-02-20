@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
-        target-branch: "develop"
+    target-branch: "develop"
     allow:
       - dependency-type: "all"
     labels:
