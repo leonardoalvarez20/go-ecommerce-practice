@@ -1,0 +1,31 @@
+name: Rebase Main into Develop
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  rebase-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout develop branch
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: develop
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Rebase develop onto main
+        run: |
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort && exit 1)
+
+      - name: Push changes
+        run: |
+          git push origin develop --force-with-lease
