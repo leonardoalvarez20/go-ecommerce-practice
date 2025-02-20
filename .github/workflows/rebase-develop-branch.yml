@@ -1,31 +1,42 @@
-name: Rebase Main into Develop
+name: Rebase Main into develop
 
 on:
   push:
     branches:
       - main
 
+env:
+  DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+  TARGET_BRANCH: develop
+
 jobs:
   rebase-main:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout develop branch
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: develop
+          token: ${{ secrets.GH_TOKEN }}
+          ref: ${{ env.TARGET_BRANCH }}
           fetch-depth: 0
 
-      - name: Set up Git
+      - name: Configure Git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Fetch latest changes from main
+        run: |
+          git fetch origin ${{ env.DEFAULT_BRANCH }}
 
       - name: Rebase develop onto main
         run: |
-          git fetch origin main
-          git rebase origin/main || (git rebase --abort && exit 1)
+          git checkout ${{ env.TARGET_BRANCH }}
+          git rebase origin/${{ env.DEFAULT_BRANCH }}
 
-      - name: Push changes
+      - name: Push rebased changes
         run: |
-          git push origin develop --force-with-lease
+          git push origin ${{ env.TARGET_BRANCH }} --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
