@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/shared/handlers"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/shared/models"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/dtos"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/users/services"
@@ -13,6 +14,7 @@ import (
 
 type UserHandler struct {
 	service *services.UserService
+	handlers.BaseHandler
 }
 
 func CreateUserHandler(service *services.UserService) *UserHandler {
@@ -40,9 +42,7 @@ func (h UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 		apiResponse = models.NewSuccessResponse(response)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(apiResponse)
+	h.WriteJSONResponse(w, statusCode, apiResponse)
 }
 
 func (h UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
@@ -60,9 +60,7 @@ func (h UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
 		apiResponse = models.NewSuccessResponse(response)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(apiResponse)
+	h.WriteJSONResponse(w, statusCode, apiResponse)
 }
 
 func (h UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
@@ -88,7 +86,5 @@ func (h UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		apiResponse = models.NewSuccessResponse(response)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(apiResponse)
+	h.WriteJSONResponse(w, statusCode, apiResponse)
 }

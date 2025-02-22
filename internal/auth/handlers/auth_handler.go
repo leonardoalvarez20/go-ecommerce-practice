@@ -7,12 +7,14 @@ import (
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/dtos"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/auth/services"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/config"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/shared/handlers"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/shared/models"
 )
 
 type AuthHandler struct {
 	service services.AuthService
 	config  *config.Config
+	handlers.BaseHandler
 }
 
 func NewAuthUserHandler(service services.AuthService, config *config.Config) *AuthHandler {
@@ -43,7 +45,5 @@ func (h AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		apiResponse = models.NewSuccessResponse(response)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(apiResponse)
+	h.WriteJSONResponse(w, statusCode, apiResponse)
 }
