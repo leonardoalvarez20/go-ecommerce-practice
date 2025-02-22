@@ -1,0 +1,8 @@
+repos:
+-   repo: https://github.com/golangci/golangci-lint
+    rev: v1.41.0  # Especifica la versión que deseas usar
+    hooks:
+    -   id: golangci-lint
+        name: golangci-lint
+        files: \.go$
+        language: system

@@ -8,6 +8,10 @@ import (
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/config"
 )
 
+type contextKey string
+
+const userClaimsKey contextKey = "userClaims"
+
 // Middleware para proteger rutas con JWT
 func JWTMiddleware(config *config.Config, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +29,7 @@ func JWTMiddleware(config *config.Config, next http.Handler) http.Handler {
 		}
 
 		// Pasar claims al contexto
-		ctx := context.WithValue(r.Context(), "userClaims", claims)
+		ctx := context.WithValue(r.Context(), userClaimsKey, claims)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

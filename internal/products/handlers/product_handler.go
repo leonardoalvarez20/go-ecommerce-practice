@@ -8,11 +8,13 @@ import (
 
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/products/dtos"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/products/services"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/shared/handlers"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/shared/models"
 )
 
 type ProductHandler struct {
 	service *services.ProductService
+	handlers.BaseHandler
 }
 
 func CreateProductHandler(service *services.ProductService) *ProductHandler {
@@ -40,9 +42,7 @@ func (h ProductHandler) Create(w http.ResponseWriter, r *http.Request) {
 		apiResponse = models.NewSuccessResponse(response)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(apiResponse)
+	h.WriteJSONResponse(w, statusCode, apiResponse)
 }
 
 func (h ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
@@ -60,9 +60,7 @@ func (h ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 		apiResponse = models.NewSuccessResponse(response)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(apiResponse)
+	h.WriteJSONResponse(w, statusCode, apiResponse)
 }
 
 func (h ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
@@ -78,7 +76,5 @@ func (h ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		apiResponse = models.NewSuccessResponse(response)
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(apiResponse)
+	h.WriteJSONResponse(w, statusCode, apiResponse)
 }
