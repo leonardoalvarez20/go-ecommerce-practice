@@ -11,16 +11,20 @@ import (
 )
 
 type UserService struct {
-	repo *repositories.UserRepository
+	repo           *repositories.UserRepository
+	passwordHasher security.PasswordHasher
 }
 
-func CreateUserServices(repo *repositories.UserRepository) *UserService {
-	return &UserService{repo: repo}
+func CreateUserServices(repo *repositories.UserRepository, passwordHasher security.PasswordHasher) *UserService {
+	return &UserService{
+		repo:           repo,
+		passwordHasher: passwordHasher,
+	}
 }
 
-func (s UserService) Create(ctx context.Context, u *dtos.CreateUserRequest) (dtos.UserResponse, error) {
+func (s *UserService) Create(ctx context.Context, u *dtos.CreateUserRequest) (dtos.UserResponse, error) {
 	user := converters.ToUserDatabaseModel(u)
-	user.Password, _ = security.HashPassword(u.Password)
+	user.Password, _ = s.passwordHasher.HashPassword(u.Password)
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
 
@@ -34,7 +38,7 @@ func (s UserService) Create(ctx context.Context, u *dtos.CreateUserRequest) (dto
 	return response, nil
 }
 
-func (s UserService) GetById(ctx context.Context, id string) (dtos.UserResponse, error) {
+func (s *UserService) GetById(ctx context.Context, id string) (dtos.UserResponse, error) {
 	user, err := s.repo.GetById(ctx, id)
 
 	if err != nil {
@@ -45,7 +49,7 @@ func (s UserService) GetById(ctx context.Context, id string) (dtos.UserResponse,
 	return response, nil
 }
 
-func (s UserService) UpdateUser(ctx context.Context, id string, u *dtos.UpdateUserRequest) (dtos.UserResponse, error) {
+func (s *UserService) UpdateUser(ctx context.Context, id string, u *dtos.UpdateUserRequest) (dtos.UserResponse, error) {
 	user := converters.ToUpdateUserDatabaseModel(u)
 	user.UpdatedAt = time.Now()
 
