@@ -12,18 +12,20 @@ import (
 
 type loginUsecase struct {
 	authRepository repositories.AuthRepository
+	passwordHasher security.PasswordHasher
 }
 
-func NewLoginUsecase(authRepository repositories.AuthRepository) *loginUsecase {
+func NewLoginUsecase(authRepository repositories.AuthRepository, passwordHasher security.PasswordHasher) *loginUsecase {
 	return &loginUsecase{
 		authRepository: authRepository,
+		passwordHasher: passwordHasher,
 	}
 }
 
 func (s *loginUsecase) Execute(ctx context.Context, loginRequest *dtos.LoginRequest) (*dtos.LoginResponse, error) {
 	authUser, err := s.authRepository.GetUserByEmail(ctx, loginRequest.Email)
-	if err != nil || security.ComparePasswords(authUser.Password, loginRequest.Email) {
-		return &dtos.LoginResponse{}, errors.New("invalid credentials")
+	if err != nil || !s.passwordHasher.ComparePasswords(authUser.Password, loginRequest.Password) {
+		return nil, errors.New("invalid credentials")
 	}
 	response := converters.ToAuthUserResponse(authUser)
 	return &response, nil
