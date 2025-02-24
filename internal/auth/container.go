@@ -10,7 +10,7 @@ import (
 
 type AuthContainer struct {
 	AuthRepositories authRepositories.AuthRepository
-	AuthServices     authServices.AuthService
+	AuthService      authServices.AuthService
 	LoginUsecase     authUsecases.Usecase
 }
 
@@ -21,7 +21,7 @@ func NewAuthContainer(db *mongo.Database, passwordHasher security.PasswordHasher
 
 	return &AuthContainer{
 		AuthRepositories: authRepositories,
-		AuthServices:     authServices,
+		AuthService:      authServices,
 		LoginUsecase:     loginUsecase,
 	}
 }
