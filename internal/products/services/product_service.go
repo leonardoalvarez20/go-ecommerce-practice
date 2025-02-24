@@ -2,58 +2,33 @@ package services
 
 import (
 	"context"
-	"time"
 
-	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/products/converters"
 	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/products/dtos"
-	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/products/repositories"
+	"github.com/leonardoalvarez20/go-ecommerce-practice/internal/products/usecases"
 )
 
+type ProductServiceUsecases struct {
+	CreateProductUsecase  *usecases.CreateProductUsecase
+	GetProductByIdUsecase *usecases.GetProductByIdUsecase
+	GetAllProductUsecase  *usecases.GetAllProductUsecase
+}
+
 type ProductService struct {
-	repo *repositories.ProductsRepository
+	productServiceUsecases ProductServiceUsecases
 }
 
-func CreateProductService(repo *repositories.ProductsRepository) *ProductService {
-	return &ProductService{repo: repo}
+func NewProductService(productServiceUsecase ProductServiceUsecases) *ProductService {
+	return &ProductService{productServiceUsecases: productServiceUsecase}
 }
 
-func (s ProductService) Create(ctx context.Context, p *dtos.CreateProductRequest) (dtos.ProductResponse, error) {
-	product := converters.ToDatabaseModel(p)
-	product.CreatedAt = time.Now()
-	product.UpdatedAt = time.Now()
-
-	err := s.repo.Create(ctx, &product)
-
-	if err != nil {
-		return dtos.ProductResponse{}, err
-	}
-
-	response := converters.ToProductResponse(&product)
-	return response, nil
+func (s ProductService) Create(ctx context.Context, p *dtos.CreateProductRequest) (*dtos.ProductResponse, error) {
+	return s.productServiceUsecases.CreateProductUsecase.Execute(ctx, p)
 }
 
-func (s ProductService) GetById(ctx context.Context, id string) (dtos.ProductResponse, error) {
-	product, err := s.repo.GetById(ctx, id)
-
-	if err != nil {
-		return dtos.ProductResponse{}, err
-	}
-	response := converters.ToProductResponse(&product)
-
-	return response, nil
+func (s ProductService) GetById(ctx context.Context, id string) (*dtos.ProductResponse, error) {
+	return s.productServiceUsecases.GetProductByIdUsecase.Execute(ctx, id)
 }
 
 func (s ProductService) GetAll(ctx context.Context) ([]dtos.ProductResponse, error) {
-	products, err := s.repo.GetAll(ctx)
-
-	if err != nil {
-		return nil, err
-	}
-
-	var response []dtos.ProductResponse
-	for _, p := range products {
-		response = append(response, converters.ToProductResponse(&p))
-	}
-
-	return response, nil
+	return s.productServiceUsecases.GetAllProductUsecase.Execute(ctx)
 }

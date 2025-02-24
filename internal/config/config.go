@@ -38,7 +38,7 @@ func NewConfig() *Config {
 		config = &Config{
 			Server: ServerConfig{
 				Port:      utils.GetEnv("PORT", "8080"),
-				AppName:   utils.GetEnv("APP_NAME", "Go Ecommerce Practice"),
+				AppName:   utils.GetEnv("APP_NAME", "go_ecommerce_api"),
 				DebugMode: utils.GetEnv("DEBUG_MODE", "true") == "true",
 			},
 			Mongo: MongoConfig{

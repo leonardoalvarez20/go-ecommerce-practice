@@ -13,17 +13,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type ProductsRepository struct {
+type productsRepository struct {
 	products *mongo.Collection
 }
 
-func NewProductRepository(db *mongo.Database) *ProductsRepository {
-	return &ProductsRepository{
+func NewProductRepository(db *mongo.Database) ProductsRepository {
+	return &productsRepository{
 		products: db.Collection("products"),
 	}
 }
 
-func (r *ProductsRepository) Create(ctx context.Context, product *models.Product) error {
+func (r *productsRepository) Create(ctx context.Context, product *models.Product) error {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
@@ -37,27 +37,27 @@ func (r *ProductsRepository) Create(ctx context.Context, product *models.Product
 	return nil
 }
 
-func (r *ProductsRepository) GetById(ctx context.Context, id string) (models.Product, error) {
+func (r *productsRepository) GetById(ctx context.Context, id string) (*models.Product, error) {
 	var product models.Product
 
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return models.Product{}, errors.New("invalid id format")
+		return nil, errors.New("invalid id format")
 	}
 
 	filter := bson.M{"_id": objectID}
 	err = r.products.FindOne(ctx, filter).Decode(&product)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return models.Product{}, errors.New("product not found")
+			return nil, errors.New("product not found")
 		}
-		return models.Product{}, err
+		return nil, err
 	}
 
-	return product, nil
+	return &product, nil
 }
 
-func (r *ProductsRepository) GetAll(ctx context.Context) ([]models.Product, error) {
+func (r *productsRepository) GetAll(ctx context.Context) ([]models.Product, error) {
 	var products []models.Product
 	filter := bson.M{}
 
